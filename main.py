@@ -60,7 +60,8 @@ def main():
         
         dt = (fpsclock.tick(60)) /1000                   ##This limits the FPS to 60
 
-    end_screen = pygame.image.load('Gameover.png')
+    end_img = pygame.image.load('Gameover.png')
+    end_screen = pygame.transform.scale(end_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
     gow = (SCREEN_WIDTH / 2) - (end_screen.get_width() / 2)
     goh = (SCREEN_HEIGHT / 2) - (end_screen.get_height() / 2)
     end_standby = True

@@ -55,7 +55,6 @@ class Shot(CircleShape):
         super().__init__(x, y, SHOT_RADIUS)
         self.shot_radius = SHOT_RADIUS
         self.speed = velocity
-        self.position = self.position
 
     def draw (self, screen):
         x = self.position[0]
