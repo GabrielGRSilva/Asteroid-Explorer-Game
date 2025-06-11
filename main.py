@@ -1,8 +1,8 @@
 
 import os
-os.environ["SDL_AUDIODRIVER"] = "dummy"  #This should avoid crashes to WSL during development
 import pygame     #opensource Python library for games
 import sys        #sys commands like sys.exit()
+from soundsandmusic import * #import sounds and music from soundsandmusic.py  
 from player import Player, Shot
 from constants import *
 from asteroids import Asteroid
@@ -12,14 +12,11 @@ def main():
     print ("Starting Asteroid Buster!")
     print (f"Screen width: {SCREEN_WIDTH}")
     print (f"Screen height: {SCREEN_HEIGHT}")
-    print ("Music: Mesmerizing Galaxy by Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/ ")
+    print ("Check the Readme file for credits on music, sound effects and more!")
     pygame.init()
     pygame.mixer.init()
 
-    pygame.mixer.music.load("Mesmerizing Galaxy Loop.mp3") #Load the game music, which will be called later
-
-   # pygame.display.set_icon()          USE THIS LATER WITH A SURFACE ARGUMENT TO UPDATE GAME ICON
-    pygame.display.set_caption("Asteroid Buster")
+    pygame.display.set_caption("Asteroid Explorer")
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     fpsclock = pygame.time.Clock()
@@ -28,6 +25,7 @@ def main():
     drawablegroup = pygame.sprite.Group()        #all objects that are drawn in the loop
     asteroids = pygame.sprite.Group()            #group with asteroid objects
     shots = pygame.sprite.Group()                #shots from the ship
+    music = Music()                              #Create music object
 
     Player.containers = (updatablegroup, drawablegroup)     #includes Player(s) to above groups
     Asteroid.containers = (asteroids, updatablegroup, drawablegroup)
@@ -38,11 +36,12 @@ def main():
     AsteroidField()
     dt = 0
     gameloop = True
-    pygame.mixer.music.set_volume(0.2)
-    pygame.mixer.music.play(loops=-1)
 
+    Music().play_music()  #Play background music THIS SHOULD BE OUTSIDE THE GAMELOOP
+
+    #MainLoop
     while gameloop == True:
-        
+     
 
         for event in pygame.event.get():            #For Loop to make the quit "X" work
             if event.type == pygame.QUIT:
@@ -58,6 +57,7 @@ def main():
         for asteroid in asteroids:
             for shot in shots:
                 if asteroid.collision(shot):
+                    AsteroidSound().play_sound()
                     pygame.sprite.Sprite.kill(shot)  #removes the shot if it hits the target
                     asteroid.split()                 #see split method in asteroids.py
 
@@ -72,6 +72,7 @@ def main():
 
     end_img = pygame.image.load('Gameover.png')
     end_screen = pygame.transform.scale(end_img, (SCREEN_WIDTH, SCREEN_HEIGHT)) #fit image to screen
+    ShipSound().play_sound()
     gow = (SCREEN_WIDTH / 2) - (end_screen.get_width() / 2)
     goh = (SCREEN_HEIGHT / 2) - (end_screen.get_height() / 2)
     end_standby = True

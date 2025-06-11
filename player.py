@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import *
 from circleshape import CircleShape
 
@@ -6,11 +7,24 @@ from circleshape import CircleShape
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
+        self.x = x
+        self.y = y
         self.rotation = 0
         self.shot_cooldown = 0
-
+        self.ship_flying = [
+            pygame.image.load(os.path.join("sprites", "ship1.png")), 
+            pygame.image.load(os.path.join("sprites", "ship2.png"))
+                       ]
+        self.fire_mov_index = 0
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+        pygame.draw.polygon(screen, "white", self.triangle(), 2) 
+
+    #THE NEXT SECTION IS UNDER CONSTRUCTION TO IMPLEMENT THE SHIP SPRITE
+    #def draw(self, screen):
+    #    self.fire_mov_index += 1
+    #    if self.fire_mov_index > 10
+    #        self.fire_mov_index = 0
+    #    screen.blit(self.ship_flying[self.fire_mov_index], (self.x, self.y))
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
